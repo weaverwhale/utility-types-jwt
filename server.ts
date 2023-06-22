@@ -23,6 +23,7 @@ const { NODE_ENV } = process.env
 // how do we handle this in production?
 // -----------------------
 const secret = uuidv4()
+const tokens: string[] = []
 
 // -----------------------
 // jwt login
@@ -36,6 +37,7 @@ app.post('/login', (req: JWTRequest, res: express.Response) => {
       return res.sendStatus(500)
     }
 
+    tokens.push(token)
     res.json({ token, secret })
   })
 })
@@ -45,7 +47,10 @@ app.post('/login', (req: JWTRequest, res: express.Response) => {
 // -----------------------
 app.get(
   '/protected',
-  expressjwt({ secret, algorithms: ['HS256'] }),
+  expressjwt({
+    secret,
+    algorithms: ['HS256'],
+  }),
   function (req: JWTRequest, res: express.Response) {
     res.json({
       message: `🤫 the password is ${secret}`,

@@ -1,13 +1,26 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import jwt_decode from 'jwt-decode'
 import axios from 'axios'
 import { Button } from './component-library/Button/Button'
 import { InputBase, Stack, Text, Space, Card, Container } from '@mantine/core'
 
 export default function JWTComponent() {
-  const [token, setToken] = useState('')
   const [protectedData, setProtectedData] = useState('')
   const [username, setUsername] = useState('')
+  const [token, setToken] = useState('')
+
+  // localstorage
+  useEffect(() => {
+    if (token === '') return
+    localStorage.setItem('token', JSON.stringify(token))
+  }, [token])
+
+  useEffect(() => {
+    const lsToken = JSON.parse(localStorage.getItem('token') as any)
+    if (lsToken) {
+      setToken(lsToken)
+    }
+  }, [])
 
   const handleLogin = async () => {
     try {
@@ -34,6 +47,7 @@ export default function JWTComponent() {
   }
 
   const handleLogout = () => {
+    localStorage.removeItem('token')
     setToken('')
     setProtectedData('')
   }
