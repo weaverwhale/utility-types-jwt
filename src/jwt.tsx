@@ -46,7 +46,9 @@ export default function JWTComponent() {
           <p>Welcome, {JSON.stringify(decodedToken)}!</p>
           <p>Protected Data: {protectedData}</p>
           <Button onClick={handleGetProtectedData}>Get Protected Data</Button>
-          <Button onClick={handleLogout}>Logout</Button>
+          <Button variant="secondary" onClick={handleLogout}>
+            Logout
+          </Button>
         </div>
       ) : (
         <Button onClick={handleLogin}>Login</Button>
