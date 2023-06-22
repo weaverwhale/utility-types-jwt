@@ -5,34 +5,38 @@ import chalk from 'chalk'
 import moment from 'moment'
 import jwt from 'jsonwebtoken'
 import { expressjwt, Request as JWTRequest } from 'express-jwt'
+import { v4 as uuidv4 } from 'uuid'
 
 // -----------------------
 // express app
 // -----------------------
 const app = express()
 const port = 3000
-const appName = chalk.hex('#1877f2')('[triple-whale] ')
+const appName = chalk.blue('[🐳🐳🐳] ')
 app.use(express.json())
 
 dotenv.config()
 const { NODE_ENV } = process.env
 
 // -----------------------
-// secret key
+// jwt secret
+// how do we handle this in production?
 // -----------------------
-const secret = 'password'
+const secret = uuidv4()
 
+// -----------------------
+// jwt login
+// -----------------------
 app.post('/login', (req: JWTRequest, res: express.Response) => {
-  const { username = '', password = '' } = req.body
-  if (username === '' || password === '' || password !== secret)
-    return res.sendStatus(401)
+  const { username = '' } = req.body
+  if (username === '') return res.sendStatus(401)
 
-  jwt.sign({ username, password }, secret, (err: any, token: any) => {
+  jwt.sign({ username }, secret, (err: any, token: any) => {
     if (err) {
       return res.sendStatus(500)
     }
 
-    res.json({ token })
+    res.json({ token, secret })
   })
 })
 
@@ -43,7 +47,12 @@ app.get(
   '/protected',
   expressjwt({ secret, algorithms: ['HS256'] }),
   function (req: JWTRequest, res: express.Response) {
-    res.json({ message: '🤫 the password is password' })
+    res.json({
+      message: `🤫 the password is ${secret}`,
+      data: {
+        secret,
+      },
+    })
   }
 )
 
@@ -57,10 +66,8 @@ app.get('/day', (req: Request, res: Response) => {
 const loggy = () => {
   console.log(
     appName +
-      chalk.green(
-        `🐳🐳🐳 listening http://localhost:${
-          NODE_ENV === 'production' ? '80' : port
-        }`
+      chalk.blue(
+        `listening http://localhost:${NODE_ENV === 'production' ? '80' : port}`
       )
   )
 }
