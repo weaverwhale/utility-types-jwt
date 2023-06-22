@@ -54,4 +54,4 @@ export default {
   //     lineHeight: '2rem',
   //   },
   // },
-};
+}

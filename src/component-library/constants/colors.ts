@@ -1,8 +1,8 @@
 interface Tuple<T, N extends number> extends Array<T> {
-  length: N;
+  length: N
 }
 
-type ColorArray = Tuple<string, 10>;
+type ColorArray = Tuple<string, 10>
 
 export default {
   gray: [
@@ -185,4 +185,4 @@ export default {
     '#E0E7FF',
     '#EEF2FF',
   ] as ColorArray,
-} as const;
+} as const

@@ -1,3 +1,3 @@
 export interface StyleComputer {
-  customStyles: any; // TODO: Make type
+  customStyles: any // TODO: Make type
 }

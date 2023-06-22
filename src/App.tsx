@@ -1,21 +1,9 @@
-import { Button } from "./component-library/Button/Button";
+import JWTComponent from './jwt'
 
 export default function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <Button>Button</Button>
-      </header>
-      <main>
-        <h1>Hi</h1>
-        <Button
-          onClick={() => console.log("hello world")}
-          variant="primary"
-          color="green.5"
-        >
-          Button green.5
-        </Button>
-      </main>
+      <JWTComponent />
     </div>
-  );
+  )
 }
