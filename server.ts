@@ -84,6 +84,9 @@ app.get(
 // -----------------------
 // what's my secret?
 // in our case, secret = "API token"
+// ---
+// this is a public route
+// I dont think we want this in prod
 // -----------------------
 app.get('/secret', function (req: JWTRequest, res: express.Response) {
   const { username = '' } = req.auth ?? {}
