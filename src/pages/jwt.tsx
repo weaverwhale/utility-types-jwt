@@ -13,6 +13,7 @@ export default function JWTComponent() {
   useEffect(() => {
     if (token === '') return
     localStorage.setItem('token', JSON.stringify(token))
+    handleGetProtectedData()
   }, [token])
 
   useEffect(() => {
@@ -27,8 +28,8 @@ export default function JWTComponent() {
       const response = await axios.post('/login', {
         username,
       })
-      const { token } = response.data
-      setToken(token)
+      const { token: resToken } = response.data
+      setToken(resToken)
     } catch (error) {
       console.error(error)
     }
