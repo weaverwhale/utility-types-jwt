@@ -6,6 +6,7 @@ import moment from 'moment'
 import jwt from 'jsonwebtoken'
 import { expressjwt, Request as JWTRequest } from 'express-jwt'
 import { v4 as uuidv4 } from 'uuid'
+import { LocalStorage } from 'node-localstorage'
 
 // -----------------------
 // express app
@@ -15,14 +16,19 @@ const port = 3000
 const appName = chalk.blue('[🐳🐳🐳] ')
 app.use(express.json())
 
+// -----------------------
+// env vars
+// -----------------------
 dotenv.config()
 const { NODE_ENV } = process.env
 
 // -----------------------
-// jwt secret
-// how do we handle this in production?
+// jwt secret functionality
+// validate secret based on user
 // -----------------------
-const secret = uuidv4()
+const localStorage = new LocalStorage('./scratch')
+let secret = localStorage.getItem('secret') ?? uuidv4()
+localStorage.setItem('secret', secret)
 
 // -----------------------
 // jwt login
@@ -36,7 +42,7 @@ app.post('/login', (req: JWTRequest, res: express.Response) => {
       return res.sendStatus(500)
     }
 
-    res.json({ token, secret })
+    res.json({ token, secret, time: moment().format() })
   })
 })
 
@@ -52,18 +58,21 @@ app.get(
   function (req: JWTRequest, res: express.Response) {
     res.json({
       message: `🤫 the password is ${secret}`,
-      data: {
-        secret,
-      },
+      time: moment().format(),
+      secret,
     })
   }
 )
 
 // -----------------------
-// are we authed?
+// are we alive?
 // -----------------------
-app.get('/day', (req: Request, res: Response) => {
-  res.json({ token: moment().startOf('day').format('YYYY-MM-DD') })
+app.get('/ping', (req: Request, res: Response) => {
+  res.json({
+    message: 'pong',
+    status: 200,
+    time: moment().format(),
+  })
 })
 
 const loggy = () => {

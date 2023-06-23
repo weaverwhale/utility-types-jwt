@@ -5,7 +5,7 @@ import { Button } from '../component-library/Button/Button'
 import { InputBase, Stack, Text, Space, Card, Container } from '@mantine/core'
 
 export default function JWTComponent() {
-  const [protectedData, setProtectedData] = useState('')
+  const [protectedData, setProtectedData] = useState({} as any)
   const [username, setUsername] = useState('')
   const [token, setToken] = useState('')
 
@@ -39,8 +39,7 @@ export default function JWTComponent() {
       const response = await axios.get('/protected', {
         headers: { Authorization: `Bearer ${token}` },
       })
-      const { message } = response.data
-      setProtectedData(message)
+      setProtectedData(response.data)
     } catch (error) {
       console.error(error)
     }
@@ -49,7 +48,7 @@ export default function JWTComponent() {
   const handleLogout = () => {
     localStorage.removeItem('token')
     setToken('')
-    setProtectedData('')
+    setProtectedData({})
   }
 
   const decodedToken: any = token ? jwt_decode(token) : null
@@ -62,10 +61,11 @@ export default function JWTComponent() {
             <Text fz="lg" fw="bold">
               Welcome, {decodedToken.username}!
             </Text>
-            {protectedData && (
+            {Object.keys(protectedData).length > 0 && (
               <>
                 <Text fz="md">Protected Data:</Text>
-                <Text fs="italic">{protectedData}</Text>
+                <Text fs="italic">{protectedData.message}</Text>
+                <Text fz="sm">Requested at: {protectedData.time}</Text>
               </>
             )}
             <Space h="md" />
