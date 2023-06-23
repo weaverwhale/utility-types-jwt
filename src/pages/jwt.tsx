@@ -32,6 +32,7 @@ export default function JWTComponent() {
       const { token: resToken } = response.data
       setToken(resToken)
     } catch (error) {
+      handleLogout()
       console.error(error)
     }
   }
@@ -43,6 +44,7 @@ export default function JWTComponent() {
       })
       setProtectedData(response.data)
     } catch (error) {
+      handleLogout()
       console.error(error)
     }
   }
