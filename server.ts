@@ -24,7 +24,7 @@ const { NODE_ENV } = process.env
 
 // -----------------------
 // jwt secret functionality
-// validate secret based on user
+// @TODO generate and validate secret based on user instead of global??
 // -----------------------
 const localStorage = new LocalStorage('./scratch')
 let secret = localStorage.getItem('secret') ?? uuidv4()
