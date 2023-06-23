@@ -4,7 +4,11 @@ import * as dotenv from 'dotenv'
 import chalk from 'chalk'
 import moment from 'moment'
 import jwt from 'jsonwebtoken'
-import { expressjwt, Request as JWTRequest } from 'express-jwt'
+import {
+  expressjwt,
+  Request as JWTRequest,
+  GetVerificationKey,
+} from 'express-jwt'
 import { v4 as uuidv4 } from 'uuid'
 import { LocalStorage } from 'node-localstorage'
 
@@ -23,12 +27,9 @@ dotenv.config()
 const { NODE_ENV } = process.env
 
 // -----------------------
-// jwt secret functionality
-// @TODO generate and validate secret based on user instead of global??
+// localstorage
 // -----------------------
 const localStorage = new LocalStorage('./scratch')
-let secret = localStorage.getItem('secret') ?? uuidv4()
-localStorage.setItem('secret', secret)
 
 // -----------------------
 // jwt login
@@ -36,6 +37,9 @@ localStorage.setItem('secret', secret)
 app.post('/login', (req: JWTRequest, res: express.Response) => {
   const { username = '' } = req.body
   if (username === '') return res.sendStatus(401)
+
+  const secret = localStorage.getItem(username) ?? uuidv4()
+  localStorage.setItem(username, secret)
 
   jwt.sign({ username }, secret, (err: any, token: any) => {
     if (err) {
@@ -47,15 +51,28 @@ app.post('/login', (req: JWTRequest, res: express.Response) => {
 })
 
 // -----------------------
+// jwt get secret
+// -----------------------
+const getSecret = async (req: JWTRequest, payload: any) => {
+  const { username = '' } = payload.payload
+  const secret = localStorage.getItem(username)
+  if (!secret) throw new Error('missing_secret')
+  return secret
+}
+
+// -----------------------
 // jwt protected route
 // -----------------------
 app.get(
   '/protected',
   expressjwt({
-    secret,
+    secret: getSecret,
     algorithms: ['HS256'],
   }),
   function (req: JWTRequest, res: express.Response) {
+    const { username = '' } = req.auth ?? {}
+    const secret = localStorage.getItem(username)
+
     res.json({
       message: `🤫 the password is ${secret}`,
       time: moment().format(),
