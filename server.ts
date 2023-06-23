@@ -74,12 +74,28 @@ app.get(
     const secret = localStorage.getItem(username)
 
     res.json({
-      message: `🤫 the password is ${secret}`,
+      message: `🤫 your secret is ${secret}`,
       time: moment().format(),
       secret,
     })
   }
 )
+
+// -----------------------
+// what's my secret?
+// in our case, secret = "API token"
+// -----------------------
+app.get('/secret', function (req: JWTRequest, res: express.Response) {
+  const { username = '' } = req.auth ?? {}
+  const secret = localStorage.getItem(username)
+  if (!secret) throw new Error('missing_secret')
+
+  res.json({
+    secret,
+    status: 200,
+    time: moment().format(),
+  })
+})
 
 // -----------------------
 // are we alive?
