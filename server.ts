@@ -85,8 +85,9 @@ app.get(
 // what's my secret?
 // in our case, secret = "API token"
 // ---
-// this is a public route
-// I dont think we want this in prod
+// this route would be gated to a user
+// "if user is part of store"
+// Allow them to get their secret
 // -----------------------
 app.get('/secret', function (req: JWTRequest, res: express.Response) {
   const { username = '' } = req.auth ?? {}
