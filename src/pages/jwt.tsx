@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import jwt_decode from 'jwt-decode'
 import axios from 'axios'
-import { Button } from './component-library/Button/Button'
+import { Button } from '../component-library/Button/Button'
 import { InputBase, Stack, Text, Space, Card, Container } from '@mantine/core'
 
 export default function JWTComponent() {

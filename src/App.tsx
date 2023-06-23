@@ -1,4 +1,4 @@
-import JWTComponent from './jwt'
+import JWTComponent from './pages/jwt'
 
 export default function App() {
   return (
