@@ -67,8 +67,9 @@ export default function JWTComponent() {
             </Text>
             {Object.keys(protectedData).length > 0 && (
               <>
-                <Text fz="md">Protected Data:</Text>
-                <Text fs="italic">{protectedData.message}</Text>
+                <Text
+                  dangerouslySetInnerHTML={{ __html: protectedData.message }}
+                />
                 <Text fz="sm">Requested at: {protectedData.time}</Text>
               </>
             )}

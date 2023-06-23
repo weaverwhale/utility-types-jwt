@@ -62,7 +62,9 @@ const getSecret = async (req: JWTRequest, payload: any) => {
 
 // -----------------------
 // jwt protected route
+// require a valid token in order to access
 // -----------------------
+const topSecret = 42
 app.get(
   '/protected',
   expressjwt({
@@ -74,9 +76,10 @@ app.get(
     const secret = localStorage.getItem(username)
 
     res.json({
-      message: `🤫 your secret is ${secret}`,
+      message: `<h2>🤫 SECRETS 🤫</h2><p>Your secret: <strong>${secret}</strong></p><p>Our top secret: <strong>${topSecret}</strong></p>`,
       time: moment().format(),
       secret,
+      topSecret,
     })
   }
 )
