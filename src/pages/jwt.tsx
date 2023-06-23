@@ -55,7 +55,7 @@ export default function JWTComponent() {
   const decodedToken: any = token ? jwt_decode(token) : null
 
   return (
-    <Container size="xs">
+    <Container size="xs" p="xs">
       <Card shadow="sm" padding="lg" radius="md" withBorder>
         {token ? (
           <>
