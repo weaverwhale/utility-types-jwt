@@ -13,6 +13,7 @@ export default function JWTComponent() {
   useEffect(() => {
     if (token === '') return
     localStorage.setItem('token', JSON.stringify(token))
+    // autofetch protected data
     handleGetProtectedData()
   }, [token])
 
