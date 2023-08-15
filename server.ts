@@ -65,6 +65,12 @@ const getSecret = async (req: JWTRequest, payload: any) => {
 // require a valid token in order to access
 // -----------------------
 const topSecret = 42
+const protectedData = [
+  { id: 1, name: 'foo' },
+  { id: 2, name: 'bar' },
+  { id: 3, name: 'baz' },
+]
+
 app.get(
   '/protected',
   expressjwt({
@@ -76,10 +82,19 @@ app.get(
     const secret = localStorage.getItem(username)
 
     res.json({
-      message: `<h2>🤫 SECRETS 🤫</h2><p>Your secret: <strong>${secret}</strong></p><p>Our top secret: <strong>${topSecret}</strong></p>`,
+      message: `
+        <h2>🤫 SECRETS 🤫</h2>
+        <p>Your secret: <strong>${secret}</strong></p>
+        <p>Our top secret: <strong>${topSecret}</strong></p>
+        <p>Protected data:</p> 
+        <strong>
+          <pre>${JSON.stringify(protectedData, null, 2)}</pre>
+        </strong>
+      `,
       time: moment().format(),
       secret,
       topSecret,
+      protectedData,
     })
   }
 )

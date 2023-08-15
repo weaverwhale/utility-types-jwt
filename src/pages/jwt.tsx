@@ -67,16 +67,16 @@ export default function JWTComponent() {
             </Text>
             {Object.keys(protectedData).length > 0 && (
               <>
+                <Text fz="sm">Last Visit: {protectedData.time}</Text>
                 <Text
                   dangerouslySetInnerHTML={{ __html: protectedData.message }}
                 />
-                <Text fz="sm">Requested at: {protectedData.time}</Text>
               </>
             )}
             <Space h="md" />
             <Stack>
               <Button onClick={handleGetProtectedData}>
-                Get Protected Data
+                Update protected data
               </Button>
               <Button variant="secondary" color="red.5" onClick={handleLogout}>
                 Logout
